@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    border-style: none;
+}
+
+.body{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-bar{
+    background-color: black;
+    height: 55px;
+    transition: 290ms;
+    display: flex;
+    justify-content: start;
+
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.home, .chat_room{
+    display: flex;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: black;
+    color: whitesmoke;
+    font-family: Roboto, sans-serif;
+    font-size: 21px;
+    font-weight: bold;
+    border: none;
+    transition: background-color 1s ease, color 1s ease;
+    align-items: center;
+
+    height: 100%
+}
+
+.home.on-home{
+    /*transition: background-color 1s ease, color 1s ease; /*This transition effect isn't working, careful when the effect is applied*/
+    background-color: whitesmoke;
+    color: black;
+}
+
+.chat_room.on-chat_room{
+    transition: background-color 5s ease, color 5s ease;
+    background-color: whitesmoke;
+    color: black;
+}
+
+.chat_room{
+    margin-left: 10px;
+}
+

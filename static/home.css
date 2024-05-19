@@ -1,0 +1,96 @@
+.text{
+    color: whitesmoke;
+    font-size: 45px;
+    font-family: Roboto, sans-serif;
+    text-align: center;
+}
+
+.input{
+    margin: auto;
+    display: flex;
+    text-align: center;
+    color: whitesmoke;
+    font-size: 30px;
+    font-family: Roboto, sans-serif;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.welcome-message{
+    margin-top: -10px;
+    margin-bottom: 40px;
+}
+
+.welcome-message label{
+    font-size: 60px;
+}
+
+.username-entry-box{
+    margin-bottom: 3vh;
+}
+
+.password-entry-box{
+    margin-bottom: 5vh;
+}
+
+.username-entry-box input, .password-entry-box input{
+    height: 6vh;
+    width: 45vh;
+    background-color: rgba(0, 0, 0, 0);
+
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    color: antiquewhite;
+
+    align-content: center;
+    justify-content: center;
+
+}
+
+.username-entry-box input::placeholder, .password-entry-box input::placeholder{
+    text-align: center;
+}
+
+.username-entry-box input:focus, .password-entry-box input:focus{
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.join-button{
+    margin-bottom: 5vh;
+}
+
+.join-button button, .sign-up-button button{
+    height: 6vh;
+    width: 30vh;
+
+    border: solid 1px white;
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0);
+
+    color: whitesmoke;
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+}
+
+.sign-up-button button{
+    width: 15vh;
+}
+
+.join-button button:hover, .sign-up-button button:hover{
+    cursor: pointer;
+}
+
+#login-error-message{
+    background-color: floralwhite;
+
+    /*width: 5vh;*/
+
+    font-size: 20px;
+    margin-bottom: 2vh;
+}
+
+body{
+    /*background-color: black;*/
+    background-image: url("magic.png");
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/commonone.css">
+    <link rel="stylesheet" href="../static/signup.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="outer-box">
+        <div class="username-takein">
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+        <p id="username-error-message" style="color: darkred; display: none;">Username already exists!</p>
+        <div class="password-takein">
+            <input type="password" id="first-password" name="fist-password" placeholder="Enter your password" required>
+        </div>
+        <div class="password-retakein">
+            <input type="password" id="second-password" name="second-password" placeholder="Reenter your password" required>
+        </div>
+        <p id="error-message" style="color: darkred; display: none;">Passwords do not match!</p>
+        <div class="confirm">
+<!--            <a href="">-->
+                <button type="submit" id="submit-button">Submit</button>
+<!--            </a>-->
+        </div>
+        <p id="registration-error-message" style="color: darkred; display: none;">Registration unsuccessful! Please try again</p>
+    </div>
+    <script src="../static/singup.js"></script>
+    <script src="../static/message_disappear.js"></script>
+    <script src="../static/margin_adjust.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+body{
+    background-image: url("leaf.jpg");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+    margin:auto;
+}
+
+.username-takein input, .password-takein input, .password-retakein input{
+    height: 8vh;
+    width: 45vh;
+    background-color: rgba(0, 0, 0, 0);
+
+    font-family: Roboto, sans-serif;
+    font-size: 24px;
+    color: whitesmoke;
+
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+.username-takein input::placeholder, .password-takein input::placeholder, .password-retakein input::placeholder{
+    text-align: center;
+}
+
+.username-takein, .password-takein{
+    margin-bottom: 4vh;
+}
+
+.password-retakein{
+    margin-bottom: 25vh;
+}
+
+p{
+    font-size: 20px;
+
+    background-color: white;
+    width: 45vh;
+
+    margin-bottom: 2vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.confirm button{
+    height: 6vh;
+    width: 30vh;
+    margin-left: 15vw;
+
+    border: solid 1px white;
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0);
+
+    color: whitesmoke;
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+}

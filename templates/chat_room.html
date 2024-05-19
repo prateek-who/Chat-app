@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/commonone.css">
+    <link rel="stylesheet" href="../static/chat_room.css">
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body class="body">
+<ul id="message-list"></ul>
+<div class="box">
+    <form>
+        <input id="text" autocomplete="off" placeholder="Enter your text" required>
+        <button id="send_button">
+            <img src="../static/send-svgrepo-com.svg" alt="Send Icon" width="24" height="24">
+        </button>
+    </form>
+</div>
+
+<script>
+    const username = "{{ username }}";
+    window.onload = function() {
+        setupWebsocket(username);
+    };
+</script>
+<script src="../static/chat_room.js"></script>
+</body>
+</html>

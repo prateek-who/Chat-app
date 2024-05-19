@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/commonone.css">
+    <link rel="stylesheet" href="../static/home.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body class="body">
+<div class="input">
+    <form id="joinChatForm" action="/" method="post">
+        <div class="welcome-message">
+            <label>Enter your name and password to join the chat:</label>
+        </div>
+        <div class="username-entry-box">
+            <input id="username" type="text" name="username" placeholder="Enter your username" required>
+        </div>
+        <div class="password-entry-box">
+            <input id="password" type="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <div class="join-button">
+            <button id="submit" type="submit">Join Chat</button>
+        </div>
+        <p id="login-error-message" style="color: darkred; display: none;">Entered Username/Password is incorrect</p>
+        <div class="sign-up-button">
+            <a href="signup.html">
+                <button type="button">Sign Up</button>
+            </a>
+        </div>
+    </form>
+</div>
+<script src="../static/home.js"></script>
+<script src="../static/message_disappear.js"></script>
+</body>
+</html>
