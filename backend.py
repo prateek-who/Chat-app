@@ -8,6 +8,7 @@ from flask_session import Session
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "its_a_secret_lmaoooo_ahahaha"
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_FILE_DIR"] = "../Chat-app/flask_session_data"
 app.config["MONGO_URI"] = "mongodb://localhost:27017/Summers"
 Session(app)
 
@@ -40,12 +41,6 @@ def chat():
         return redirect(url_for('home'))
     username = session['username']
     return render_template('chat_room.html', page='chat_room', username=username)
-
-
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    return redirect(url_for('home'))
 
 
 @socketio.on('join')
@@ -83,7 +78,8 @@ def register():
     hashed_password = generate_password_hash(password)
     user = {
         "username": username,
-        "password": hashed_password
+        "password": hashed_password,
+        "is_active": False                  #check if users is already logged in
     }
     mongo.db.users.insert_one(user)
 
@@ -97,11 +93,26 @@ def login():
     password = data['password']
 
     user = mongo.db.users.find_one({"username": username})
-    if user and check_password_hash(user["password"], password):
-        session['username'] = username
-        return jsonify({"success": True, "message": "Logged in successfully"}), 200
+    if user:
+        if user.get('is_active'):
+            return jsonify({"success": False, "message": "Invalid username or password"}), 403
+        if check_password_hash(user["password"], password):
+            session['username'] = username
+            mongo.db.users.update_one({"username": username}, {"$set": {"is_active": True}})
+            return jsonify({"success": True, "message": "Logged in successfully"}), 200
+
+    return jsonify({"success": False, "message": "Invalid username or password"}), 401
+
+
+@app.route('/set_inactive')
+def set_inactive():
+    username = session.get('username')
+
+    if username:
+        mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
+        return jsonify({"success": True}), 200
     else:
-        return jsonify({"success": False, "message": "Invalid username or password"}), 401
+        return jsonify({"success": False}), 400
 
 
 if __name__ == '__main__':

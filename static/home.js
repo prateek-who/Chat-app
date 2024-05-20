@@ -8,7 +8,13 @@ document.getElementById('submit').addEventListener('click', async function (even
 
     if (!account_check.success) {
         document.getElementById('login-error-message').style.display = 'block';
-    } else {
+        document.getElementById('login-error-message').textContent = account_check.message;
+    }
+    else if (account_check.logged_in) {
+        document.getElementById('login-error-message').style.display = 'block';
+        document.getElementById('login-error-message').textContent = account_check.message;
+    }
+    else {
         document.getElementById('login-error-message').style.display = 'none';
         // Redirect to the chat room or another page if login is successful
         window.location.href = `/chat_room.html`;
@@ -31,4 +37,3 @@ async function checkAccountValidity(username, password){
         return false;
     }
 }
-
