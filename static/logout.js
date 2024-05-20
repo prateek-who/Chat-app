@@ -1,3 +1,5 @@
+// Entire thing needs fixing!!
+
 let isPageVisible = true;
 let isRefreshing = false;
 
