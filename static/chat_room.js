@@ -3,7 +3,7 @@ function setupWebsocket(username) {
 
     const form = document.querySelector('form');
     form.onsubmit = function() {
-        const textInput = document.getElementById('text');
+        const textInput = document.getElementById('text-box');
         const text = textInput.value;
         if (text.trim() !== '') {
             socket.emit('message', { username: username, text: text });
@@ -11,23 +11,29 @@ function setupWebsocket(username) {
         }
         return false;
     };
+        socket.emit('join', { username: username });
 
-    socket.on('message', function(msg) {
-        const messageList = document.getElementById('message-list');
-        const item = document.createElement('li');
+        socket.on('message', function(msg) {
+            const messageList = document.getElementById('message-list');
+            const item = document.createElement('li');
 
-        if (typeof msg === 'object' && 'username' in msg && 'text' in msg) {
-            item.textContent = `${msg.username}: ${msg.text}`;
-            if (msg.username === username) {
-                item.classList.add('user-message');
+            if (typeof msg === 'object' && 'username' in msg && 'text' in msg) {
+                if (msg.username === 'Server') {
+                    item.textContent = `${msg.text}`; // Display only the message text for server messages
+                    item.classList.add('server-message');
+                } else {
+                    item.textContent = `${msg.username}: ${msg.text}`;
+                    if (msg.username === username) {
+                        item.classList.add('user-message');
+                    } else {
+                        item.classList.add('other-message');
+                    }
+                }
             } else {
-                item.classList.add('other-message');
+                item.textContent = 'Error: Invalid message format';
             }
-        } else {
-            item.textContent = 'Error: Invalid message format';
-        }
 
-        messageList.appendChild(item);
+            messageList.appendChild(item);
         scrollToBottom();
     });
 
@@ -36,8 +42,6 @@ function setupWebsocket(username) {
     function scrollToBottom() {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-
-    window.onload = function() {
-        socket.emit('join', { username: username });
-    };
 }
+
+setInactiveOnUnload(username);

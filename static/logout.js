@@ -1,35 +1,10 @@
-// Entire thing needs fixing!!
-
-let isPageVisible = true;
-let isRefreshing = false;
-
-function handleVisibilityChange() {
-    isPageVisible = !document.hidden;
+function setInactiveOnUnload(username){
+    console.log(username));
+    window.addEventListener('unload', function (){
+        const payload = JSON.stringify({username: username});
+        navigator.sendBeacon('/set_inactive', payload)
+    })
 }
 
-document.addEventListener('visibilitychange', handleVisibilityChange);
 
-window.addEventListener('beforeunload', async function() {
-    // If the page is still visible, it means the user is navigating away within the same tab
-    // We don't need to send the request in this case
-    if (isPageVisible) return;
-
-    try {
-        const response = await fetch('/set_inactive', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        if (!data.success) {
-            console.error('Failed to set user inactive:', data.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-});
-
-window.addEventListener('beforeunload', function() {
-    isRefreshing = true;
-});
+// FIX THIS FFS. I AM SOOOO DONE WITH THIS SHITTTTTT

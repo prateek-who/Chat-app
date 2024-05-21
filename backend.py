@@ -45,9 +45,10 @@ def chat():
 
 @socketio.on('join')
 def on_join(data):
-    if 'username' in session:
-        username = session['username']
-        send(f"{username} has joined the chat room.", broadcast=True)
+    username = data['username']
+    session['username'] = username
+    join_message = {'username': 'Server', 'text': f"{username} has joined the chat room."}
+    send(join_message, broadcast=True)
 
 
 @socketio.on('message')
@@ -104,9 +105,12 @@ def login():
     return jsonify({"success": False, "message": "Invalid username or password"}), 401
 
 
-@app.route('/set_inactive')
+@app.route('/set_inactive', methods=['POST'])
 def set_inactive():
-    username = session.get('username')
+    data = request.get_json()
+    username = data.get('username')
+
+    print(username)
 
     if username:
         mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})

@@ -12,22 +12,25 @@
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 </head>
 <body class="body">
-<ul id="message-list"></ul>
-<div class="box">
+    <ul id="message-list"></ul>
+    <button id="logout-button">
+        <img src="../static/shutdown.svg" alt="Logout" width="25" height="25">
+    </button>
     <form>
-        <input id="text" autocomplete="off" placeholder="Enter your text" required>
-        <button id="send_button">
+        <input id="text-box" autocomplete="off" placeholder="Enter your text" required>
+        <button id="send-button">
             <img src="../static/send-svgrepo-com.svg" alt="Send Icon" width="24" height="24">
         </button>
     </form>
-</div>
 
-<script>
-    const username = "{{ username }}";
-    window.onload = function() {
-        setupWebsocket(username);
-    };
-</script>
-<script src="../static/chat_room.js"></script>
+    <script>
+        const username = "{{ username }}";
+        window.onload = function() {
+            setupWebsocket(username);
+        };
+    </script>
+    <script src="../static/chat_room.js"></script>
+    <script src="../static/logout.js"></script>
 </body>
+
 </html>
