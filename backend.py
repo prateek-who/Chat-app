@@ -3,7 +3,13 @@ from flask_socketio import SocketIO, emit, send
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
+import threading
+from datetime import datetime, timedelta
 
+
+user_sessions = {}
+user_to_be_removed = []
+lock = threading.Lock()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "its_a_secret_lmaoooo_ahahaha"
@@ -80,7 +86,7 @@ def register():
     user = {
         "username": username,
         "password": hashed_password,
-        "is_active": False                  #check if users is already logged in
+        "is_active": False                  # check if users is already logged in
     }
     mongo.db.users.insert_one(user)
 
@@ -108,15 +114,52 @@ def login():
 @app.route('/set_inactive', methods=['POST'])
 def set_inactive():
     data = request.get_json()
+
     username = data.get('username')
 
-    print(username)
-
-    if username:
+    if data:
         mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
+        session.clear()
         return jsonify({"success": True}), 200
     else:
         return jsonify({"success": False}), 400
+
+
+def check_user_activity():
+    while True:
+        current_time = datetime.now()
+
+        with lock:
+            for username, last_activity in user_sessions.items():
+                responsive_time = current_time - last_activity
+
+                if responsive_time > timedelta(seconds=30):
+                    print("Logging out user:", username)
+                    mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
+                    # session.clear()
+                    user_to_be_removed.append(username)
+
+            for username in user_to_be_removed:
+                del user_sessions[username]
+
+        threading.Event().wait(10)
+
+
+activity_thread = threading.Thread(target=check_user_activity)
+activity_thread.daemon = True
+activity_thread.start()
+
+
+@app.route('/heartbeat', methods=['POST'])
+def heartbeat():
+    data = request.get_json()
+    username = data.get('username')
+
+    user_sessions[username] = datetime.now()
+
+    print('Received heartbeat from user:', username)
+
+    return "", 200
 
 
 if __name__ == '__main__':

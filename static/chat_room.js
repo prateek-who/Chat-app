@@ -11,29 +11,30 @@ function setupWebsocket(username) {
         }
         return false;
     };
-        socket.emit('join', { username: username });
 
-        socket.on('message', function(msg) {
-            const messageList = document.getElementById('message-list');
-            const item = document.createElement('li');
+    socket.emit('join', { username: username });
 
-            if (typeof msg === 'object' && 'username' in msg && 'text' in msg) {
-                if (msg.username === 'Server') {
-                    item.textContent = `${msg.text}`; // Display only the message text for server messages
-                    item.classList.add('server-message');
-                } else {
-                    item.textContent = `${msg.username}: ${msg.text}`;
-                    if (msg.username === username) {
-                        item.classList.add('user-message');
-                    } else {
-                        item.classList.add('other-message');
-                    }
-                }
+    socket.on('message', function(msg) {
+        const messageList = document.getElementById('message-list');
+        const item = document.createElement('li');
+
+        if (typeof msg === 'object' && 'username' in msg && 'text' in msg) {
+            if (msg.username === 'Server') {
+                item.textContent = `${msg.text}`;
+                item.classList.add('server-message');
             } else {
-                item.textContent = 'Error: Invalid message format';
+                item.textContent = `${msg.username}: ${msg.text}`;
+                if (msg.username === username) {
+                    item.classList.add('user-message');
+                } else {
+                    item.classList.add('other-message');
+                }
             }
+        } else {
+            item.textContent = 'Error: Invalid message format';
+        }
 
-            messageList.appendChild(item);
+        messageList.appendChild(item);
         scrollToBottom();
     });
 
@@ -43,5 +44,3 @@ function setupWebsocket(username) {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 }
-
-setInactiveOnUnload(username);

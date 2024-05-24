@@ -24,13 +24,15 @@
     </form>
 
     <script>
-        const username = "{{ username }}";
+        const username = "{{ username }}"; // Ensure this is rendered correctly by server
         window.onload = function() {
             setupWebsocket(username);
+            setInactiveOnBeforeUnload(username);
+            store_uname(username);
         };
     </script>
     <script src="../static/chat_room.js"></script>
     <script src="../static/logout.js"></script>
+    <script src="../static/heartbeat.js"></script>
 </body>
-
 </html>
