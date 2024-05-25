@@ -1,5 +1,5 @@
 let uname;
-function sendHeartbeat(username) {
+function sendHeartbeat() {
     fetch('/heartbeat', {
         method: 'POST',
         headers: {

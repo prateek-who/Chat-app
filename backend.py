@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 
 
 user_sessions = {}
-user_to_be_removed = []
 lock = threading.Lock()
 
 app = Flask(__name__)
@@ -86,7 +85,7 @@ def register():
     user = {
         "username": username,
         "password": hashed_password,
-        "is_active": False                  # check if users is already logged in
+        "is_active": False  # used to check if user is already logged in (not while reg-ing, ofc lmao)
     }
     mongo.db.users.insert_one(user)
 
@@ -114,7 +113,6 @@ def login():
 @app.route('/set_inactive', methods=['POST'])
 def set_inactive():
     data = request.get_json()
-
     username = data.get('username')
 
     if data:
@@ -130,17 +128,21 @@ def check_user_activity():
         current_time = datetime.now()
 
         with lock:
+            user_to_be_removed = []
             for username, last_activity in user_sessions.items():
                 responsive_time = current_time - last_activity
 
                 if responsive_time > timedelta(seconds=30):
                     print("Logging out user:", username)
                     mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
-                    # session.clear()
                     user_to_be_removed.append(username)
 
             for username in user_to_be_removed:
                 del user_sessions[username]
+                with app.app_context():
+                    session.pop('username', None)
+
+            user_to_be_removed.clear()
 
         threading.Event().wait(10)
 
@@ -160,6 +162,21 @@ def heartbeat():
     print('Received heartbeat from user:', username)
 
     return "", 200
+
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    username = session.get('username')
+    if username:
+        with lock:
+            if username in user_sessions:
+                del user_sessions[username]
+        mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
+        session.clear()
+        print(f"User {username} disconnected")
+        print('huh')
+
+        socketio.emit('redirect')
 
 
 if __name__ == '__main__':
