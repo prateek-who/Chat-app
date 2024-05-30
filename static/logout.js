@@ -1,23 +1,22 @@
 function setInactiveOnBeforeUnload(username) {
     window.addEventListener('beforeunload', function(event) {
-        // const payload = JSON.stringify({ username: username });
-        // fetch('/set_inactive', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: payload
-        // });
+        // This log confirms that the beforeunload event is triggered
+        console.log('beforeunload event triggered');
 
-        console.log('hello')
+        // Make sure to execute socket.emit before the page unloads
         socket.emit('disconnect');
+
+        // To redirect on refresh, this needs to be added outside of the beforeunload event
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 0);
     });
 }
 
+// Place the socket.on('redirect') listener outside of the beforeunload event handler
 socket.on('redirect', function() {
-    // redirect user to home page, but not working as of now
-    console.log('hello');
+    console.log('Redirected workingwerfgwrefgwrgw');
     window.location.href = '/';
 });
 
-// FIX THIS FFS. I AM SOOOO DONE WITH THIS SHITTTTTT
+// I want to shoot somebody rn.

@@ -174,7 +174,6 @@ def handle_disconnect():
         mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
         session.clear()
         print(f"User {username} disconnected")
-        print('huh')
 
         socketio.emit('redirect')
 
