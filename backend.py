@@ -132,19 +132,19 @@ def check_user_activity():
             for username, last_activity in user_sessions.items():
                 responsive_time = current_time - last_activity
 
-                if responsive_time > timedelta(seconds=30):
+                if responsive_time > timedelta(seconds=15):
                     print("Logging out user:", username)
                     mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
                     user_to_be_removed.append(username)
 
             for username in user_to_be_removed:
                 del user_sessions[username]
-                with app.app_context():
+                with app.test_request_context():
                     session.pop('username', None)
 
             user_to_be_removed.clear()
 
-        threading.Event().wait(10)
+        threading.Event().wait(5)
 
 
 activity_thread = threading.Thread(target=check_user_activity)
@@ -164,18 +164,18 @@ def heartbeat():
     return "", 200
 
 
-@socketio.on('disconnect')
-def handle_disconnect():
-    username = session.get('username')
-    if username:
-        with lock:
-            if username in user_sessions:
-                del user_sessions[username]
-        mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
-        session.clear()
-        print(f"User {username} disconnected")
+# @socketio.on('disconnect')
+# def handle_disconnect():
+#     username = session.get('username')
+#     if username:
+#         # with lock:
+#             # if username in user_sessions:
+#                 # del user_sessions[username]
+#         # mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
+#         # session.clear()
+#         print(f"User {username} disconnected")
 
-        socketio.emit('redirect')
+        # socketio.emit('redirect')
 
 
 if __name__ == '__main__':

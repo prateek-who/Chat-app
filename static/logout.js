@@ -1,7 +1,9 @@
+// import * as socket from "socket.io-client/build/esm-debug/on";
+
 function setInactiveOnBeforeUnload(username) {
     window.addEventListener('beforeunload', function(event) {
         // This log confirms that the beforeunload event is triggered
-        console.log('beforeunload event triggered');
+        // console.log('beforeunload event triggered');
 
         // Make sure to execute socket.emit before the page unloads
         socket.emit('disconnect');
