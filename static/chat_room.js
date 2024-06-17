@@ -20,7 +20,6 @@ function setupWebsocket(username, roomId) {
     // socket.emit('join', { username: username});
 
     socket.on('message', function(msg) {
-        console.log(msg)
         const messageList = document.getElementById('message-list');
         const item = document.createElement('li');
 
