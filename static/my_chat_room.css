@@ -1,0 +1,117 @@
+body {
+    background: black;
+}
+
+#message-list {
+    padding: 10px;
+    margin-top: 2%;
+    margin-left: 2%;
+    max-height: 80vh;
+    width: 95%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    border-radius: 25px;
+    background-color: rgba(16, 16, 16, 0);
+    scrollbar-width: none;
+
+    z-index: 9998;
+
+    position: fixed;
+    top: 15px;
+}
+
+#message-list li {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 14px;
+    font-family: Roboto, sans-serif;
+
+}
+
+#message-list li.user-message {
+    margin-left: auto;
+    background-color: #09ad10;
+    color: white;
+}
+
+#message-list li.other-message {
+    margin-right: auto;
+    background-color: white;
+    color: black;
+}
+
+#message-list li.server-message {
+    box-shadow: none;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    width: 100%; /* Ensures the message spans the full width */
+    font-style: italic; /* Optional: Italic style for server messages */
+
+    margin-left: 5vh;
+    font-size: 12px;
+
+    padding: 5px 5px;
+    border-radius: 0;
+}
+
+#message-list::-webkit-scrollbar {
+    width: 0;
+}
+
+#text-box {
+    width: 75vw;
+    height: 7vh;
+    margin-left: 15px;
+    border-radius: 25px;
+    border: 1px solid white;
+    font-size: 14px;
+    padding: 15px;
+
+    color: antiquewhite;
+    background-color: #101010;
+
+    position: fixed;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 15px;
+}
+
+#send-button{
+    width: 15vw;
+    height: 7vh;
+    margin-right: 3vw;
+    border-radius: 55px;
+    border: 1px solid white;
+    font-size: 14px;
+    padding: 15px;
+
+    background-color: whitesmoke;
+    align-content: center;
+
+    position: fixed;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 15px;
+}
+
+#send-button:hover, #logout-button:hover{
+    cursor: pointer;
+}
+
+#text:focus {
+    background-color: white;
+}

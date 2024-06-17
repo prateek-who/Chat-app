@@ -30,9 +30,10 @@
     </form>
 
     <script>
-        const username = "{{ username }}"; // Ensure this is rendered correctly by server
+        const username = "{{ username }}";
+        const room_id = "{{ room_id }}"
         window.onload = function() {
-            setupWebsocket(username);
+            setupWebsocket(username, room_id);
             setInactiveOnBeforeUnload(username);
             store_uname(username);
         };

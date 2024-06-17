@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_session import Session
 import threading
 from datetime import datetime, timedelta
+import secrets
+import string
 
 
 user_sessions = {}
+user_last_activity = {}
 lock = threading.Lock()
+public_room_id = "we6Tv77yM70LHhRyIprn"
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "its_a_secret_lmaoooo_ahahaha"
@@ -40,28 +44,66 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/chat_room.html')
+@app.route('/general_chat_room/we6Tv77yM70LHhRyIprn')
 def chat():
     if 'username' not in session:
         return redirect(url_for('home'))
     username = session['username']
-    return render_template('chat_room.html', page='chat_room', username=username)
+    return render_template('general_chat_room.html', page='chat_room', username=username, room_id=public_room_id)
+
+
+@app.route('/chatroom/<room_id>')
+def chat_room(room_id):
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    username = session['username']
+    return render_template('my_chat_room.html', page='chat_room', username=username, room_id=room_id)
+
+
+@app.route('/my_space.html')
+def my_space():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    username = session['username']
+    return render_template('my_space.html', page='my_space', username=username)
 
 
 @socketio.on('join')
 def on_join(data):
-    username = data['username']
-    session['username'] = username
-    join_message = {'username': 'Server', 'text': f"{username} has joined the chat room."}
-    send(join_message, broadcast=True)
+    try:
+        username = data['username']
+        room_id = data.get('room_id')  # Adjust to fetch room_id if used
+
+        if not username:
+            raise ValueError('Username not provided in join request')
+
+        session['username'] = username
+
+        join_message = {'username': 'Server', 'text': f"{username} has joined the chat room."}
+        join_room(room_id)
+        send(join_message, room=room_id)
+
+    except KeyError as e:
+        print(f"Error: Missing key {e}")
+        # Handle missing key error
+
+    except ValueError as ve:
+        print(f"Error: {ve}")
+        # Handle value error (e.g., username not provided)
+
+    except Exception as ex:
+        print(f"Error: {ex}")
+        # Handle other unexpected errors
 
 
 @socketio.on('message')
 def handle_message(data):
     if 'username' in session:
+        print(data)
         username = session['username']
         text = data['text']
-        emit('message', {'username': username, 'text': text}, broadcast=True)
+        room_id = data.get('room_id')
+        emit('message', {'username': username, 'text': text}, room=room_id)
 
 
 @app.route('/check_username', methods=['POST'])
@@ -70,6 +112,43 @@ def check_username():
     username = data['username']
     user = mongo.db.users.find_one({"username": username})
     return jsonify({"exists": bool(user)})
+
+
+@socketio.on('connect')
+def handle_connect():
+    username = session.get('username')
+    if username:
+        user_sessions[username] = request.sid
+        print(user_sessions)
+
+
+def generate_room_id():
+    room_id_length = 20
+    characters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+    room_id = ''.join(secrets.choice(characters) for i in range(room_id_length))
+    if room_id != public_room_id:
+        print(f"Room ID is: {room_id}")
+        return f"room_{room_id}"
+    else:
+        generate_room_id()
+
+
+@app.route('/sending_request_for_username', methods=['POST'])
+def check_and_send_username():
+    data = request.get_json()
+    username = data.get("username")
+    himself = data.get("my_name")
+
+    if username != himself:
+        user = mongo.db.users.find_one({"username": username})
+        if user:
+            recipient_sid = user_sessions.get(username)
+            if recipient_sid:
+                room_id = generate_room_id()
+                emit('friend_search_notification', {'username': himself, 'roomId': room_id}, room=recipient_sid, namespace='/')
+                return jsonify({"exists": True, "roomId": room_id})
+        return jsonify({"exists": False})
+    return jsonify({"exists": False})
 
 
 @app.route('/register', methods=['POST'])
@@ -129,7 +208,7 @@ def check_user_activity():
 
         with lock:
             user_to_be_removed = []
-            for username, last_activity in user_sessions.items():
+            for username, last_activity in user_last_activity.items():
                 responsive_time = current_time - last_activity
 
                 if responsive_time > timedelta(seconds=15):
@@ -157,9 +236,13 @@ def heartbeat():
     data = request.get_json()
     username = data.get('username')
 
-    user_sessions[username] = datetime.now()
+    with lock:
+        user_last_activity[username] = datetime.now()
 
     print('Received heartbeat from user:', username)
+    status = mongo.db.users.find_one({"username": username})
+    if status and not status.get('is_active'):
+        mongo.db.users.update_one({"username": username}, {"$set": {"is_active": True}})
 
     return "", 200
 
@@ -174,8 +257,6 @@ def heartbeat():
 #         # mongo.db.users.update_one({"username": username}, {"$set": {"is_active": False}})
 #         # session.clear()
 #         print(f"User {username} disconnected")
-
-        # socketio.emit('redirect')
 
 
 if __name__ == '__main__':
