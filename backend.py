@@ -85,15 +85,13 @@ def on_join(data):
 
     except KeyError as e:
         print(f"Error: Missing key {e}")
-        # Handle missing key error
 
     except ValueError as ve:
         print(f"Error: {ve}")
-        # Handle value error (e.g., username not provided)
+        # Handle value error (eg. username not provided)
 
     except Exception as ex:
         print(f"Error: {ex}")
-        # Handle other unexpected errors
 
 
 @socketio.on('message')
