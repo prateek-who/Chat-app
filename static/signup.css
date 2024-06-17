@@ -7,6 +7,28 @@ body{
     margin:auto;
 }
 
+#back-button{
+    background-color: transparent;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    justify-content: left;
+    margin-left: 3vw;
+    margin-top: 2vh;
+
+    border-radius: 25px;
+
+}
+
+#back-button:hover{
+    cursor: pointer;
+}
+
+#back-button:active{
+    background-color: white;
+}
+
 .username-takein input, .password-takein input, .password-retakein input{
     height: 8vh;
     width: 45vh;

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Space</title>
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">-->
+
+    <link rel="icon" href="{{ url_for('static', filename='web_icon/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='web_icon/favicon-16x16.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='web_icon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='web_icon/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='web_icon/android-chrome-512x512.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='web_icon/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='web_icon/site.webmanifest') }}">
+
+    <link rel="stylesheet" href="../static/commonone.css">
+    <link rel="stylesheet" href="../static/my_sapce.css">
+    <link rel="stylesheet" href="../static/friend_search.css">
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <label>
+        <input id="friend-search" type="text" placeholder="Search your friend here!">
+    </label>
+    <button id="find-him">
+        <img src="../static/go-arrow.svg" alt="Moon" width="20" height="20">
+    </button>
+    <button id="chat-room">
+        <img src="../static/moon.svg" alt="Moon" width="75" height="75">
+    </button>
+    <p>
+        Join public chat
+    <div id="notification-bar"></div>
+
+     <script>
+         // const socket = io();
+         const username = "{{ username }}";
+         window.onload = function (){
+             store_uname(username);
+             store_name(username);
+         }
+     </script>
+
+    <script src="../static/friend_search.js"></script>
+<!--    <script src="../static/my_space.js"></script>-->
+    <script src="../static/heartbeat.js"></script>
+</body>
+</html>

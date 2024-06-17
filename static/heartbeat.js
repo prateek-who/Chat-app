@@ -15,4 +15,4 @@ function store_uname(username){
 }
 
 // Send heartbeat every 10 seconds
-setInterval(sendHeartbeat, 10_000);
+setInterval(sendHeartbeat, 5_000);

@@ -17,7 +17,7 @@ document.getElementById('submit').addEventListener('click', async function (even
     else {
         document.getElementById('login-error-message').style.display = 'none';
         // Redirect to the chat room or another page if login is successful
-        window.location.href = `/chat_room.html`;
+        window.location.href = `/my_space.html`;
     }
 });
 

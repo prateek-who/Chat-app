@@ -1,20 +1,26 @@
-function setupWebsocket(username) {
+function setupWebsocket(username, roomId) {
     const socket = io();
+
+    socket.on('connect', () => {
+        console.log(`Connected to WebSocket server with \`${roomId}`);
+        socket.emit('join', { username: username, room_id: roomId });
+    });
 
     const form = document.querySelector('form');
     form.onsubmit = function() {
         const textInput = document.getElementById('text-box');
         const text = textInput.value;
         if (text.trim() !== '') {
-            socket.emit('message', { username: username, text: text });
+            socket.emit('message', { username: username, text: text, room_id: roomId });
             textInput.value = '';
         }
         return false;
     };
 
-    socket.emit('join', { username: username });
+    // socket.emit('join', { username: username});
 
     socket.on('message', function(msg) {
+        console.log(msg)
         const messageList = document.getElementById('message-list');
         const item = document.createElement('li');
 

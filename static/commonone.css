@@ -6,6 +6,11 @@
     border-style: none;
 }
 
+@font-face {
+    font-family: 'Riesling';
+    src: url("../static/fonts/Riesling.ttf") format("truetype");
+}
+
 .body{
     margin: 0;
     padding: 0;
